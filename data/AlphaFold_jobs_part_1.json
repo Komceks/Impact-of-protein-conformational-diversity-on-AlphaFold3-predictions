@@ -1,0 +1,488 @@
+[
+    {
+        "name": "5vmm_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "2w72_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_HEM",
+                    "count": 4
+                }
+            },
+            {
+                "ion": {
+                    "ion": "K",
+                    "count": 3
+                }
+            }
+        ]
+    },
+    {
+        "name": "5j80_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MPEETQTQDQPMEEEEVETFAFQAEIAQLMSLIINTFYSNKEIFLRELISNSSDALDKIRYESLTDPSKLDSGKELHINLIPNKQDRTLTIVDTGIGMTKADLINNLGTIAKSGTKAFMEALQAGADISMIGQFGVGFYSAYLVAEKVTVITKHNDDEQYAWESSAGGSFTVRTDTGEPMGRGTKVILHLKEDQTEYLEERRIKEIVKKHSQFIGYPITLFVEKERDKEVSDDEAEEKEDKEEEKEKEEKESEDKPEIEDVGSDEEEEKKDGDKKKKKKIKEKYIDQEELNKTKPIWTRNPDDITNEEYGEFYKSLTNDWEDHLAVKHFSVEGQLEFRALLFVPRRAPFDLFENRKKKNNIKLYVRRVFIMDNCEELIPEYLNFIRGVVDSEDLPLNISREMLQQSKILKVIRKNLVKKCLELFTELAEDKENYKKFYEQFSKNIKLGIHEDSQNRKKLSELLRYYTSASGDEMVSLKDYCTRMKENQKHIYYITGETKDQVANSAFVERLRKHGLEVIYMIEPIDEYCVQQLKEFEGKTLVSVTKEGLELPEDEEEKKKQEEKKTKFENLCKIMKDILEKKVEKVVVSNRLVTSPCCIVTSTYGWTANMERIMKAQALRDNSTMGYMAAKKHLEINPDHSIIETLRQKAEADKNDKSVKDLVILLYETALLSSGFSLEDPQTHANRIYRMIKLGLGIDEDDPTADDTSAAVTEEMPPLEGDDDTSRMEEVD",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "6tn5_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MPEETQTQDQPMEEEEVETFAFQAEIAQLMSLIINTFYSNKEIFLRELISNSSDALDKIRYESLTDPSKLDSGKELHINLIPNKQDRTLTIVDTGIGMTKADLINNLGTIAKSGTKAFMEALQAGADISMIGQFGVGFYSAYLVAEKVTVITKHNDDEQYAWESSAGGSFTVRTDTGEPMGRGTKVILHLKEDQTEYLEERRIKEIVKKHSQFIGYPITLFVEKERDKEVSDDEAEEKEDKEEEKEKEEKESEDKPEIEDVGSDEEEEKKDGDKKKKKKIKEKYIDQEELNKTKPIWTRNPDDITNEEYGEFYKSLTNDWEDHLAVKHFSVEGQLEFRALLFVPRRAPFDLFENRKKKNNIKLYVRRVFIMDNCEELIPEYLNFIRGVVDSEDLPLNISREMLQQSKILKVIRKNLVKKCLELFTELAEDKENYKKFYEQFSKNIKLGIHEDSQNRKKLSELLRYYTSASGDEMVSLKDYCTRMKENQKHIYYITGETKDQVANSAFVERLRKHGLEVIYMIEPIDEYCVQQLKEFEGKTLVSVTKEGLELPEDEEEKKKQEEKKTKFENLCKIMKDILEKKVEKVVVSNRLVTSPCCIVTSTYGWTANMERIMKAQALRDNSTMGYMAAKKHLEINPDHSIIETLRQKAEADKNDKSVKDLVILLYETALLSSGFSLEDPQTHANRIYRMIKLGLGIDEDDPTADDTSAAVTEEMPPLEGDDDTSRMEEVD",
+                    "count": 1
+                }
+            },
+            {
+                "ion": {
+                    "ion": "CL",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "2ofm_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MKSYTSLLAVAILCLFGGVNGACTKNAIAQTGFNKDKYFNGDVWYVTDYLDLEPDDVPKRYCAALAAGTASGKLKEALYHYDPKTQDTFYDVSELQVESLGKYTANFKKVDKNGNVKVAVTAGNYYTFTVMYADDSSALIHTCLHKGNKDLGDLYAVLNRNKDAAAGDKVKSAVSAATLEFSKFISTKENNCAYDNDSLKSLLTK",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1x8q_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MKSYTSLLAVAILCLFGGVNGACTKNAIAQTGFNKDKYFNGDVWYVTDYLDLEPDDVPKRYCAALAAGTASGKLKEALYHYDPKTQDTFYDVSELQVESLGKYTANFKKVDKNGNVKVAVTAGNYYTFTVMYADDSSALIHTCLHKGNKDLGDLYAVLNRNKDAAAGDKVKSAVSAATLEFSKFISTKENNCAYDNDSLKSLLTK",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_HEM",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1gfs_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MSKQRVFIAGHRGMVGSAIRRQLEQRGDVELVLRTRDELNLLDSRAVHDFFASERIDQVYLAAAKVGGIVANNTYPADFIYQNMMIESNIIHAAHQNDVNKLLFLGSSCIYPKLAKQPMAESELLQGTLEPTNEPYAIAKIAGIKLCESYNRQYGRDYRSVMPTNLYGPHDNFHPSNSHVIPALLRRFHEATAQNAPDVVVWGSGTPMREFLHVDDMAAASIHVMELAHEVWLENTQPMLSHINVGTGVDCTIRELAQTIAKVVGYKGRVVFDASKPDGTPRKLLDVTRLHQLGWYHEISLEAGLASTYQWFLENQDRFRG",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1e7s_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MSKQRVFIAGHRGMVGSAIRRQLEQRGDVELVLRTRDELNLLDSRAVHDFFASERIDQVYLAAAKVGGIVANNTYPADFIYQNMMIESNIIHAAHQNDVNKLLFLGSSCIYPKLAKQPMAESELLQGTLEPTNEPYAIAKIAGIKLCESYNRQYGRDYRSVMPTNLYGPHDNFHPSNSHVIPALLRRFHEATAQNAPDVVVWGSGTPMREFLHVDDMAAASIHVMELAHEVWLENTQPMLSHINVGTGVDCTIRELAQTIAKVVGYKGRVVFDASKPDGTPRKLLDVTRLHQLGWYHEISLEAGLASTYQWFLENQDRFRG",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_NAP",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1k6i_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MAQQKKTIAVVNATGRQAASLIRVAAAVGHHVRAQVHSLKGLIAEELQAIPNVTLFQGPLLNNVPLMDTLFEGAHLAFINTTSQAGDEIAIGKDLADAAKRAGTIQHYIYSSMPDHSLYGPWPAVPMWAPKFTVENYVRQLGLPSTFVYAGIYNNNFTSLPYPLFQMELMPDGTFEWHAPFDPDIPLPWLDAEHDVGPALLQIFKDGPQKWNGHRIALTFETLSPVQVCAAFSRALNRRVTYVQVPKVEIKVNIPVGYREQLEAIEVVFGEHKAPYFPLPEFSRPAAGSPKGLGPANGKGAGAGMMQGPGGVISQRVTDEARKLWSGWRDMEEYAREVFPIEEEANGLDWML",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1xgk_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MAQQKKTIAVVNATGRQAASLIRVAAAVGHHVRAQVHSLKGLIAEELQAIPNVTLFQGPLLNNVPLMDTLFEGAHLAFINTTSQAGDEIAIGKDLADAAKRAGTIQHYIYSSMPDHSLYGPWPAVPMWAPKFTVENYVRQLGLPSTFVYAGIYNNNFTSLPYPLFQMELMPDGTFEWHAPFDPDIPLPWLDAEHDVGPALLQIFKDGPQKWNGHRIALTFETLSPVQVCAAFSRALNRRVTYVQVPKVEIKVNIPVGYREQLEAIEVVFGEHKAPYFPLPEFSRPAAGSPKGLGPANGKGAGAGMMQGPGGVISQRVTDEARKLWSGWRDMEEYAREVFPIEEEANGLDWML",
+                    "count": 1
+                }
+            },
+            {
+                "ion": {
+                    "ion": "K",
+                    "count": 4
+                }
+            }
+        ]
+    },
+    {
+        "name": "1pdb_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MVGSLNCIVAVSQNMGIGKNGDLPWPPLRNEFRYFQRMTTTSSVEGKQNLVIMGKKTWFSIPEKNRPLKGRINLVLSRELKEPPQGAHFLSRSLDDALKLTEQPELANKVDMVWIVGGSSVYKEAMNHPGHLKLFVTRIMQDFESDTFFPEIDLEKYKLLPEYPGVLSDVQEEKGIKYKFEVYEKND",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1kmv_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MVGSLNCIVAVSQNMGIGKNGDLPWPPLRNEFRYFQRMTTTSSVEGKQNLVIMGKKTWFSIPEKNRPLKGRINLVLSRELKEPPQGAHFLSRSLDDALKLTEQPELANKVDMVWIVGGSSVYKEAMNHPGHLKLFVTRIMQDFESDTFFPEIDLEKYKLLPEYPGVLSDVQEEKGIKYKFEVYEKND",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_NDP",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1d6j_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MSTNITFHASALTRSERTELRNQRGLTIWLTGLSASGKSTLAVELEHQLVRDRRVHAYRLDGDNIRFGLNKDLGFSEADRNENIRRIAEVAKLFADSNSIAITSFISPYRKDRDTARQLHEVATPGEETGLPFVEVYVDVPVEVAEQRDPKGLYKKAREGVIKEFTGISAPYEAPANPEVHVKNYELPVQDAVKQIIDYLDTKGYLPAKKE",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1m7h_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MSTNITFHASALTRSERTELRNQRGLTIWLTGLSASGKSTLAVELEHQLVRDRRVHAYRLDGDNIRFGLNKDLGFSEADRNENIRRIAEVAKLFADSNSIAITSFISPYRKDRDTARQLHEVATPGEETGLPFVEVYVDVPVEVAEQRDPKGLYKKAREGVIKEFTGISAPYEAPANPEVHVKNYELPVQDAVKQIIDYLDTKGYLPAKKE",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_ADP",
+                    "count": 4
+                }
+            }
+        ]
+    },
+    {
+        "name": "3n80_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MLRAAARFGPRLGRRLLSAAATQAVPAPNQQPEVFCNQIFINNEWHDAVSRKTFPTVNPSTGEVICQVAEGDKEDVDKAVKAARAAFQLGSPWRRMDASHRGRLLNRLADLIERDRTYLAALETLDNGKPYVISYLVDLDMVLKCLRYYAGWADKYHGKTIPIDGDFFSYTRHEPVGVCGQIIPWNFPLLMQAWKLGPALATGNVVVMKVAEQTPLTALYVANLIKEAGFPPGVVNIVPGFGPTAGAAIASHEDVDKVAFTGSTEIGRVIQVAAGSSNLKRVTLELGGKSPNIIMSDADMDWAVEQAHFALFFNQGQCCCAGSRTFVQEDIYDEFVERSVARAKSRVVGNPFDSKTEQGPQVDETQFKKILGYINTGKQEGAKLLCGGGIAADRGYFIQPTVFGDVQDGMTIAKEEIFGPVMQILKFKTIEEVVGRANNSTYGLAAAVFTKDLDKANYLSQALQAGTVWVNCYDVFGAQSPFGGYKMSGSGRELGEYGLQAYTEVKTVTVKVPQKNS",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "8dr9_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MLRAAARFGPRLGRRLLSAAATQAVPAPNQQPEVFCNQIFINNEWHDAVSRKTFPTVNPSTGEVICQVAEGDKEDVDKAVKAARAAFQLGSPWRRMDASHRGRLLNRLADLIERDRTYLAALETLDNGKPYVISYLVDLDMVLKCLRYYAGWADKYHGKTIPIDGDFFSYTRHEPVGVCGQIIPWNFPLLMQAWKLGPALATGNVVVMKVAEQTPLTALYVANLIKEAGFPPGVVNIVPGFGPTAGAAIASHEDVDKVAFTGSTEIGRVIQVAAGSSNLKRVTLELGGKSPNIIMSDADMDWAVEQAHFALFFNQGQCCCAGSRTFVQEDIYDEFVERSVARAKSRVVGNPFDSKTEQGPQVDETQFKKILGYINTGKQEGAKLLCGGGIAADRGYFIQPTVFGDVQDGMTIAKEEIFGPVMQILKFKTIEEVVGRANNSTYGLAAAVFTKDLDKANYLSQALQAGTVWVNCYDVFGAQSPFGGYKMSGSGRELGEYGLQAYTEVKTVTVKVPQKNS",
+                    "count": 1
+                }
+            },
+            {
+                "ion": {
+                    "ion": "NA",
+                    "count": 2
+                }
+            }
+        ]
+    },
+    {
+        "name": "2cnu_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MSITKTELDGILPLVARGKVRDIYEVDAGTLLFVATDRISAYDVIMENSIPEKGILLTKLSEFWFKFLSNDVRNHLVDIAPGKTIFDYLPAKLSEPKYKTQLEDRSLLVHKHKLIPLEVIVRGYITGSAWKEYVKTGTVHGLKQPQGLKESQEFPEPIFTPSTKAEQGEHDENISPAQAAELVGEDLSRRVAELAVKLYSKCKDYAKEKGIIIADTKFEFGIDEKTNEIILVDEVLTPDSSRFWNGASYKVGESQDSYDKQFLRDWLTANKLNGVNGVKMPQDIVDRTRAKYIEAYETLTGSKWSH",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "2cnq_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MSITKTELDGILPLVARGKVRDIYEVDAGTLLFVATDRISAYDVIMENSIPEKGILLTKLSEFWFKFLSNDVRNHLVDIAPGKTIFDYLPAKLSEPKYKTQLEDRSLLVHKHKLIPLEVIVRGYITGSAWKEYVKTGTVHGLKQPQGLKESQEFPEPIFTPSTKAEQGEHDENISPAQAAELVGEDLSRRVAELAVKLYSKCKDYAKEKGIIIADTKFEFGIDEKTNEIILVDEVLTPDSSRFWNGASYKVGESQDSYDKQFLRDWLTANKLNGVNGVKMPQDIVDRTRAKYIEAYETLTGSKWSH",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_ADP",
+                    "count": 2
+                }
+            },
+            {
+                "ion": {
+                    "ion": "MG",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1xgd_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MASRLLLNNGAKMPILGLGTWKSPPGQVTEAVKVAIDVGYRHIDCAHVYQNENEVGVAIQEKLREQVVKREELFIVSKLWCTYHEKGLVKGACQKTLSDLKLDYLDLYLIHWPTGFKPGKEFFPLDESGNVVPSDTNILDTWAAMEELVDEGLVKAIGISNFNHLQVEMILNKPGLKYKPAVNQIECHPYLTQEKLIQYCQSKGIVVTAYSPLGSPDRPWAKPEDPSLLEDPRIKAIAAKHNKTTAQVLIRFPMQRNLVVIPKSVTPERIAENFKVFDFELSSQDMTTLLSYNRNWRVCALLSCTSHKDYPFHEEF",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1us0_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MASRLLLNNGAKMPILGLGTWKSPPGQVTEAVKVAIDVGYRHIDCAHVYQNENEVGVAIQEKLREQVVKREELFIVSKLWCTYHEKGLVKGACQKTLSDLKLDYLDLYLIHWPTGFKPGKEFFPLDESGNVVPSDTNILDTWAAMEELVDEGLVKAIGISNFNHLQVEMILNKPGLKYKPAVNQIECHPYLTQEKLIQYCQSKGIVVTAYSPLGSPDRPWAKPEDPSLLEDPRIKAIAAKHNKTTAQVLIRFPMQRNLVVIPKSVTPERIAENFKVFDFELSSQDMTTLLSYNRNWRVCALLSCTSHKDYPFHEEF",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_NDP",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_CIT",
+                    "count": 2
+                }
+            }
+        ]
+    },
+    {
+        "name": "7u8k_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MCDEDETTALVCDNGSGLVKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIITNWDDMEKIWHHTFYNELRVAPEEHPTLLTEAPLNPKANREKMTQIMFETFNVPAMYVAIQAVLSLYASGRTTGIVLDSGDGVTHNVPIYEGYALPHAIMRLDLAGRDLTDYLMKILTERGYSFVTTAEREIVRDIKEKLCYVALDFENEMATAASSSSLEKSYELPDGQVITIGNERFRCPETLFQPSFIGMESAGIHETTYNSIMKCDIDIRKDLYANNVMSGGTTMYPGIADRMQKEITALAPSTMKIKIIAPPERKYSVWIGGSILASLSTFQQMWITKQEYDEAGPSIVHRKCF",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "4b1y_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MCDEDETTALVCDNGSGLVKAGFAGDDAPRAVFPSIVGRPRHQGVMVGMGQKDSYVGDEAQSKRGILTLKYPIEHGIITNWDDMEKIWHHTFYNELRVAPEEHPTLLTEAPLNPKANREKMTQIMFETFNVPAMYVAIQAVLSLYASGRTTGIVLDSGDGVTHNVPIYEGYALPHAIMRLDLAGRDLTDYLMKILTERGYSFVTTAEREIVRDIKEKLCYVALDFENEMATAASSSSLEKSYELPDGQVITIGNERFRCPETLFQPSFIGMESAGIHETTYNSIMKCDIDIRKDLYANNVMSGGTTMYPGIADRMQKEITALAPSTMKIKIIAPPERKYSVWIGGSILASLSTFQQMWITKQEYDEAGPSIVHRKCF",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_ATP",
+                    "count": 1
+                }
+            },
+            {
+                "ion": {
+                    "ion": "MG",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1ufp_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MVLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "5yce_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MVLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_HEM",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "3cue_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MNSEYDYLFKLLLIGNSGVGKSCLLLRFSDDTYTNDYISTIGVDFKIKTVELDGKTVKLQIWDTAGQERFRTITSSYYRGSHGIIIVYDVTDQESFNGVKMWLQEIDRYATSTVLKLLVGNKCDLKDKRVVEYDVAKEFADANKMPFLETSALDSTNVEDAFLTMARQIKESMSQQNLNETTQKKEDKGNVNLKGQSLTNTGGGCC",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "2bcg_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MNSEYDYLFKLLLIGNSGVGKSCLLLRFSDDTYTNDYISTIGVDFKIKTVELDGKTVKLQIWDTAGQERFRTITSSYYRGSHGIIIVYDVTDQESFNGVKMWLQEIDRYATSTVLKLLVGNKCDLKDKRVVEYDVAKEFADANKMPFLETSALDSTNVEDAFLTMARQIKESMSQQNLNETTQKKEDKGNVNLKGQSLTNTGGGCC",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_GDP",
+                    "count": 1
+                }
+            },
+            {
+                "ion": {
+                    "ion": "MG",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "7a2b_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MSNRLDGKVAIITGGTLGIGLAIATKFVEEGAKVMITGRHSDVGEKAAKSVGTPDQIQFFQHDSSDEDGWTKLFDATEKAFGPVSTLVNNAGIAVNKSVEETTTAEWRKLLAVNLDGVFFGTRLGIQRMKNKGLGASIINMSSIEGFVGDPSLGAYNASKGAVRIMSKSAALDCALKDYDVRVNTVHPGYIKTPLVDDLPGAEEAMSQRTKTPMGHIGEPNDIAYICVYLASNESKFATGSEFVVDGGYTAQ",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1zk4_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MSNRLDGKVAIITGGTLGIGLAIATKFVEEGAKVMITGRHSDVGEKAAKSVGTPDQIQFFQHDSSDEDGWTKLFDATEKAFGPVSTLVNNAGIAVNKSVEETTTAEWRKLLAVNLDGVFFGTRLGIQRMKNKGLGASIINMSSIEGFVGDPSLGAYNASKGAVRIMSKSAALDCALKDYDVRVNTVHPGYIKTPLVDDLPGAEEAMSQRTKTPMGHIGEPNDIAYICVYLASNESKFATGSEFVVDGGYTAQ",
+                    "count": 1
+                }
+            },
+            {
+                "ion": {
+                    "ion": "MG",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "1apc_apo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MRKSLLAILAVSSLVFSSASFAADLEDNMETLNDNLKVIEKADNAAQVKDALTKMRAAALDAQKATPPKLEDKSPDSPEMKDFRHGFDILVGQIDDALKLANEGKVKEAQAAAEQLKTTRNAYHQKYR",
+                    "count": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "6dyf_holo",
+        "modelSeeds": [],
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "MRKSLLAILAVSSLVFSSASFAADLEDNMETLNDNLKVIEKADNAAQVKDALTKMRAAALDAQKATPPKLEDKSPDSPEMKDFRHGFDILVGQIDDALKLANEGKVKEAQAAAEQLKTTRNAYHQKYR",
+                    "count": 1
+                }
+            },
+            {
+                "ligand": {
+                    "ligand": "CCD_HEC",
+                    "count": 2
+                }
+            },
+            {
+                "ion": {
+                    "ion": "CU",
+                    "count": 1
+                }
+            }
+        ]
+    }
+]
