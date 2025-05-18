@@ -61,21 +61,18 @@ for entry_key in filtered_df['entry_key']:
     html = requests.get(url).content.decode()
     soup = BeautifulSoup(html, 'html.parser')
 
-    # --- APO table ---
     apo_table = soup.find('span', class_='label', string='Found APO Sites:') \
                     .find_next('table')
     apo_rows = apo_table.find('tbody').find_all('tr')
     apo_records = [parse_row(r, 'apo') for r in apo_rows]
     apo_rmsd_vals = [r['apo_RMSD'] for r in apo_records]
 
-    # --- HOLO table ---
     holo_table = soup.find('span', class_='label', string='Found HOLO Sites:') \
                      .find_next('table')
     holo_rows = holo_table.find('tbody').find_all('tr')
     holo_records = [parse_row(r, 'holo') for r in holo_rows]
     holo_rmsd_vals = [r['holo_RMSD'] for r in holo_records]
 
-    # --- Compute per‐entry stats ---
     stats = {
         'entry_key': entry_key,
         'apo_count': len(apo_rmsd_vals),
@@ -125,7 +122,6 @@ df.to_csv('apo_holo_pairs_with_RMSD_info.csv')
 import requests
 import pandas as pd
 
-# Function to fetch PDB information using RCSB API
 def fetch_pdb_info(pdb_id):
     url = f'https://data.rcsb.org/rest/v1/core/entry/{pdb_id[:4]}'
     response = requests.get(url)
@@ -220,10 +216,8 @@ results_df = pd.DataFrame(results)
 
 # Filter results: keep only rows where Other_Ligands are empty
 filtered_results_df = results_df[(results_df['Other_Ligands'].apply(len) == 0)]
-
 filtered_results_df = filtered_results_df[["Apo_PDB_ID", "Holo_PDB_ID", "Ligands", "Ions"]]
 
-# Display the filtered results
 print(filtered_results_df)
 filtered_results_df.to_csv("apo_holo_pair_ligand_and_ion_data.csv", index=False)
 
@@ -269,8 +263,8 @@ for index, row in filtered_results_df.iterrows():
     apo = row['Apo_PDB_ID'][:4]
     holo = row['Holo_PDB_ID'][:4]
     print(f"Processing pair: Apo - {apo}, Holo - {holo}")
-    download_cif(apo, output_dir)  # Download CIF for apo
-    download_cif(holo, output_dir)  # Download CIF for holo
+    download_cif(apo, output_dir)
+    download_cif(holo, output_dir)
 
 rmsd_df = pd.read_csv('apo_holo_pairs_with_RMSD_info.csv')
 reviewed_df = pd.read_csv('reviewed_apo_holo_pair_ligand_and_ion_data.tsv', sep='\t')
@@ -450,7 +444,6 @@ def download_fasta_sequences(uniprot_ids, output_dir):
         response = requests.get(url, headers=headers)
 
         if response.status_code == 200:
-            # Save the FASTA sequence to a file named `uniprot_id.fasta`
             file_path = os.path.join(output_dir, f"{uniprot_id}.fasta")
             with open(file_path, "w") as fasta_file:
                 fasta_file.write(response.text)
@@ -530,75 +523,73 @@ def create_alphafold_job(job_name, sequence, ligands=None, ions=None):
 
     return job_data
 
-# Main script
-if __name__ == "__main__":
-    # Load data files
-    input_tsv = "/content/reviewed_apo_holo_pair_ligand_and_ion_data.tsv"
-    uniprot_holo_pdb_df = pd.read_csv("/content/uniprot_holo_pdb_list.tsv", sep='\t')
-    ligand_ion_file = "/content/ligand_and_ion_counts.csv"
-    output_file = "alphafold_jobs.json"
+def save_jobs_in_parts(all_jobs, output_file_base, max_jobs=100):
+    total_jobs = len(all_jobs)
+    num_parts = (total_jobs + max_jobs - 1) // max_jobs
 
-    # Read the main data file
-    data = pd.read_csv(input_tsv, sep='\t')
+    for i in range(num_parts):
+        start = i * max_jobs
+        end = min((i + 1) * max_jobs, total_jobs)
+        part_jobs = all_jobs[start:end]
 
-    # Read ligand and ion counts
-    counts_data = pd.read_csv(ligand_ion_file)
-    ligand_counts = counts_data.set_index('Holo_id')['Ligand_count'].to_dict()
-    ion_counts = counts_data.set_index('Holo_id')['Ions_count'].to_dict()
-    all_jobs = []
+        filename = f"{output_file_base}_part_{i + 1}.json"
+        with open(filename, "w") as outfile:
+            json.dump(part_jobs, outfile, indent=4)
+        print(f"Saved {len(part_jobs)} jobs to {filename}")
 
-    for _, row in data.iterrows():
-        apo_id = row['Apo_PDB_ID']
-        holo_id = row['Holo_PDB_ID']
-        ligands = eval(row['Ligands']) if 'Ligands' in row and pd.notna(row['Ligands']) else []
-        ions = eval(row['Ions']) if 'Ions' in row and pd.notna(row['Ions']) else []
-        # Get Uniprot ID from mapping
-        uniprot_id = uniprot_holo_pdb_df.loc[uniprot_holo_pdb_df['Holo_PDB_ID']== holo_id[0:4], 'uniprot_id'].iloc[0]
-        print(uniprot_id, holo_id)
-        if not uniprot_id:
-            print(f"No Uniprot ID found for {holo_id}")
-            continue
+# Load data files
+input_tsv = "/content/reviewed_apo_holo_pair_ligand_and_ion_data.tsv"
+uniprot_holo_pdb_df = pd.read_csv("/content/uniprot_holo_pdb_list.tsv", sep='\t')
+ligand_ion_file = "/content/ligand_and_ion_counts.csv"
+output_file = "alphafold_jobs.json"
 
-        # Get sequences for apo and holo structures
-        apo_sequence = get_sequence(uniprot_id)
-        holo_sequence = get_sequence(uniprot_id)
+# Read the main data file
+data = pd.read_csv(input_tsv, sep='\t')
 
-        if apo_sequence:
-            apo_job = create_alphafold_job(job_name=f'{apo_id}_apo', sequence=apo_sequence)
-            all_jobs.append(apo_job)
-            print(f"Added AlphaFold job for apo: {apo_id}")
+# Read ligand and ion counts
+counts_data = pd.read_csv(ligand_ion_file)
+ligand_counts = counts_data.set_index('Holo_id')['Ligand_count'].to_dict()
+ion_counts = counts_data.set_index('Holo_id')['Ions_count'].to_dict()
+all_jobs = []
 
-        if holo_sequence:
-            ligand_dict = {}
-            for i, ion in enumerate(ligands):
-              counts = list(map(int, re.findall(r"\d+", ligand_counts.get(holo_id[0:4], 1))))
-              ligand_dict[ion] = counts[i]
+for _, row in data.iterrows():
+    apo_id = row['Apo_PDB_ID']
+    holo_id = row['Holo_PDB_ID']
+    ligands = eval(row['Ligands']) if 'Ligands' in row and pd.notna(row['Ligands']) else []
+    ions = eval(row['Ions']) if 'Ions' in row and pd.notna(row['Ions']) else []
+    # Get Uniprot ID from mapping
+    uniprot_id = uniprot_holo_pdb_df.loc[uniprot_holo_pdb_df['Holo_PDB_ID']== holo_id[0:4], 'uniprot_id'].iloc[0]
+    print(uniprot_id, holo_id)
+    if not uniprot_id:
+        print(f"No Uniprot ID found for {holo_id}")
+        continue
 
-            ion_dict = {}
-            for i, ion in enumerate(ions):
-              counts = list(map(int, re.findall(r"\d+", ion_counts.get(holo_id[0:4], 1))))
-              ion_dict[ion] = counts[i]
-            holo_job = create_alphafold_job(job_name=f'{holo_id}_holo', sequence=holo_sequence, ligands=ligand_dict, ions=ion_dict)
-            all_jobs.append(holo_job)
-            print(f"Added AlphaFold job for holo: {holo_id}")
-    print(len(all_jobs))
+    # Get sequences for apo and holo structures
+    apo_sequence = get_sequence(uniprot_id)
+    holo_sequence = get_sequence(uniprot_id)
 
-    def save_jobs_in_parts(all_jobs, output_file_base, max_jobs=100):
-        total_jobs = len(all_jobs)
-        num_parts = (total_jobs + max_jobs - 1) // max_jobs  # Ceiling division
+    if apo_sequence:
+        apo_job = create_alphafold_job(job_name=f'{apo_id}_apo', sequence=apo_sequence)
+        all_jobs.append(apo_job)
+        print(f"Added AlphaFold job for apo: {apo_id}")
 
-        for i in range(num_parts):
-            start = i * max_jobs
-            end = min((i + 1) * max_jobs, total_jobs)
-            part_jobs = all_jobs[start:end]
+    if holo_sequence:
+        ligand_dict = {}
+        for i, ion in enumerate(ligands):
+            counts = list(map(int, re.findall(r"\d+", ligand_counts.get(holo_id[0:4], 1))))
+            ligand_dict[ion] = counts[i]
 
-            filename = f"{output_file_base}_part_{i + 1}.json"
-            with open(filename, "w") as outfile:
-                json.dump(part_jobs, outfile, indent=4)
-            print(f"Saved {len(part_jobs)} jobs to {filename}")
+        ion_dict = {}
+        for i, ion in enumerate(ions):
+            counts = list(map(int, re.findall(r"\d+", ion_counts.get(holo_id[0:4], 1))))
+            ion_dict[ion] = counts[i]
+        holo_job = create_alphafold_job(job_name=f'{holo_id}_holo', sequence=holo_sequence, ligands=ligand_dict, ions=ion_dict)
+        all_jobs.append(holo_job)
+        print(f"Added AlphaFold job for holo: {holo_id}")
+print(len(all_jobs))
 
-    output_file_base = "AlphaFold_jobs"
-    save_jobs_in_parts(all_jobs, output_file_base, max_jobs=30)
+output_file_base = "AlphaFold_jobs"
+save_jobs_in_parts(all_jobs, output_file_base, max_jobs=30)
 
 """# Išpakuojame prognozuotas struktūras"""
 
@@ -616,13 +607,13 @@ import os
 import json
 import re
 
-# Directory containing your JSON files
+# Directory containing JSON files
 data_dir = "all_folds"
 
 # Output TSV file
 output_file = "plddt_results.tsv"
 
-# 1. Discover all fold numbers across all folders
+# Discover all fold numbers across all folders
 fold_numbers = set()
 pattern = re.compile(r".*full_data_(\d+)\.json$")
 for folder in os.listdir(data_dir):
@@ -635,21 +626,17 @@ for folder in os.listdir(data_dir):
         if m:
             fold_numbers.add(int(m.group(1)))
 
-# Sort so columns come out in numeric order
 fold_numbers = sorted(fold_numbers)
 
-# 2. Write header
 with open(output_file, "w") as outfile:
     header = ["PDB_NAME"] + [f"PLDDT_{n}" for n in fold_numbers]
     outfile.write("\t".join(header) + "\n")
 
-    # 3. Process each folder and collect averages
     for folder in os.listdir(data_dir):
         folder_path = os.path.join(data_dir, folder)
         if not os.path.isdir(folder_path):
             continue
 
-        # compute avg pLDDT per fold in this folder
         avg_by_fold = {}
         for filename in os.listdir(folder_path):
             m = pattern.match(filename)
@@ -664,13 +651,12 @@ with open(output_file, "w") as outfile:
                 avg_plddt = sum(atom_plddts) / len(atom_plddts)
                 avg_by_fold[fold_idx] = avg_plddt
 
-        # build row: PDB name (uppercase) + values or blanks
         row = [folder.upper()]
         for n in fold_numbers:
             if n in avg_by_fold:
                 row.append(f"{avg_by_fold[n]:.2f}")
             else:
-                row.append("")  # or use "NA" if you prefer
+                row.append("")
         outfile.write("\t".join(row) + "\n")
 
 print(f"pLDDT calculations completed. Results saved in {output_file}.")
@@ -715,8 +701,8 @@ with tqdm.notebook.tqdm(total=total) as pbar:
 !unzip /content/structures_from_pdb.zip -d /content/cif_files
 
 from pymol import cmd
-# from IPython.display import Image
 import pandas as pd
+
 df = pd.read_csv("/content/reviewed_apo_holo_pair_ligand_and_ion_data.tsv", sep='\t')
 pairs = []
 for index, row in df.iterrows():
@@ -728,18 +714,16 @@ for pair in pairs:
   cmd.reinitialize()
   cmd.load(f"/content/cif_files/content/cif_files/{pair[0][0:4]}.cif", "str1")
   cmd.load(f"/content/cif_files/content/cif_files/{pair[1][0:4]}.cif", "str2")
-  RMSD = cmd.align("str2", "str1")[0]  # Align structure2 to structure1
+  RMSD = cmd.align("str2", "str1")[0]
   RMSD_map[f'{pair[0][0:4]}_{pair[1][0:4]}'] = RMSD
   print(f"RMSD between {pair[0]} and {pair[1]}: {RMSD}")
 
 df['APO_vs_HOLO'] = RMSD_map.values()
 print(df)
 
-# APO X HOLO_ALPHA
 new_pairs = []
 for pair in pairs:
   alpha_model = pair[1] + '_holo'
-  # print(alpha_model)
   new_pairs.append([pair[0], alpha_model])
 RMSD_map = dict()
 pairs_w_model = dict()
@@ -751,7 +735,7 @@ for pair in new_pairs:
     cmd.reinitialize()
     cmd.load(f"/content/cif_files/content/cif_files/{pair[0][0:4]}.cif", "str1")
     cmd.load(f"/content/all_folds/{pair[1]}/fold_{pair[1]}_model_{i}.cif", "str2")
-    RMSD_new = cmd.align("str2", "str1")[0]  # Align structure2 to structure1
+    RMSD_new = cmd.align("str2", "str1")[0]
     if RMSD < RMSD_new:
       RMSD = RMSD_new
       model = i
@@ -762,7 +746,6 @@ for pair in new_pairs:
     'alphafold_model_id':  model
   }
   model_w_pdb_ids.loc[len(model_w_pdb_ids)] = new_row
-#   model_w_pdb_ids.append({'apo_pdb_id': pair[0], 'holo_pdb_id': pair[1][:4], 'alphafold_model_id': model}, ignore_index=True)
   pairs_w_model[pair[0]] = model
   print(f"RMSD between {pair[0]} and {pair[1][0:4]}_alpha: {RMSD}")
 
@@ -775,17 +758,14 @@ model_w_pdb_ids.to_csv('model_w_pdb_ids.csv', index=False)
 new_pairs = []
 for pair in pairs:
   alpha_model = pair[0] + '_apo'
-  # print(alpha_model)
   new_pairs.append([pair[1], alpha_model, pairs_w_model[pair[0]]])
 RMSD_map = dict()
 for pair in new_pairs:
-  # RMSD = 100
   cmd.reinitialize()
   cmd.load(f"/content/cif_files/content/cif_files/{pair[0]}.cif", "str1")
   cmd.load(f"/content/all_folds/{pair[1]}/fold_{pair[1]}_model_{pair[2]}.cif", "str2")
   RMSD = cmd.align("str2", "str1")[0]  # Align structure2 to structure1
 
-      # print(f"Model: {i}")
   RMSD_map[f'{pair[0]}_{pair[1][0:4]}'] = RMSD
   print(f"RMSD between {pair[0]} and {pair[1][0:4]}_alpha: {RMSD}")
 
@@ -798,17 +778,13 @@ df.to_csv('RMSD_results.csv', index=False)
 new_pairs = []
 for pair in pairs:
   alpha_model = pair[0] + '_apo'
-  # print(alpha_model)
   new_pairs.append([pair[0], alpha_model, pairs_w_model[pair[0]]])
 RMSD_map = dict()
 for pair in new_pairs:
-  # RMSD = 100
   cmd.reinitialize()
   cmd.load(f"/content/cif_files/content/cif_files/{pair[0]}.cif", "str1")
   cmd.load(f"/content/all_folds/{pair[1]}/fold_{pair[1]}_model_{pair[2]}.cif", "str2")
-  RMSD = cmd.align("str2", "str1")[0]  # Align structure2 to structure1
-
-      # print(f"Model: {i}")
+  RMSD = cmd.align("str2", "str1")[0]
   RMSD_map[f'{pair[0]}_{pair[1][0:4]}'] = RMSD
   print(f"RMSD between {pair[0]} and {pair[1][0:4]}_alpha: {RMSD}")
 
@@ -819,17 +795,13 @@ print(df)
 new_pairs = []
 for pair in pairs:
   alpha_model = pair[1] + '_holo'
-  # print(alpha_model)
   new_pairs.append([pair[1], alpha_model, pairs_w_model[pair[0]]])
 RMSD_map = dict()
 for pair in new_pairs:
-  # RMSD = 100
   cmd.reinitialize()
   cmd.load(f"/content/cif_files/content/cif_files/{pair[0]}.cif", "str1")
   cmd.load(f"/content/all_folds/{pair[1]}/fold_{pair[1]}_model_{pair[2]}.cif", "str2")
-  RMSD = cmd.align("str2", "str1")[0]  # Align structure2 to structure1
-
-      # print(f"Model: {i}")
+  RMSD = cmd.align("str2", "str1")[0]
   RMSD_map[f'{pair[0]}_{pair[1][0:4]}'] = RMSD
   print(f"RMSD between {pair[0]} and {pair[1][0:4]}_alpha: {RMSD}")
 
@@ -841,17 +813,13 @@ new_pairs = []
 for pair in pairs:
   alpha_model_apo = pair[0] + '_apo'
   alpha_model_holo = pair[1] + '_holo'
-  # print(alpha_model)
   new_pairs.append([alpha_model_apo, alpha_model_holo, pairs_w_model[pair[0]]])
 RMSD_map = dict()
 for pair in new_pairs:
-  # RMSD = 100
   cmd.reinitialize()
   cmd.load(f"/content/all_folds/{pair[0]}/fold_{pair[0]}_model_{pair[2]}.cif", "str1")
   cmd.load(f"/content/all_folds/{pair[1]}/fold_{pair[1]}_model_{pair[2]}.cif", "str2")
-  RMSD = cmd.align("str2", "str1")[0]  # Align structure2 to structure1
-
-      # print(f"Model: {i}")
+  RMSD = cmd.align("str2", "str1")[0]
   RMSD_map[f'{pair[0][0:4]}_{pair[1][0:4]}'] = RMSD
   print(f"RMSD between {pair[0][0:4]}_apo_alpha and {pair[1][0:4]}_holo_alpha: {RMSD}")
 

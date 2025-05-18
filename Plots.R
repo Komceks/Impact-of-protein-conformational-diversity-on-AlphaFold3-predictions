@@ -5,8 +5,9 @@ library(tidyr)
 library(readr)
 library(ggpubr)
 library(gridExtra)
+
 # Load the RMSD data
-data <- read.csv("RMSD_results.csv", sep=',')  # Replace with your actual file path
+data <- read.csv("data/RMSD_results.csv", sep=',')
 
 # Add classification for A and B
 data <- data %>%
@@ -24,7 +25,7 @@ figure0 <- ggplot(data, aes(x = APO_vs_HOLO)) +
   scale_y_continuous(limits = c(0,0.6),
                      breaks = seq(0, 0.6, 0.05),
                      expand = c(0,0)) +
-  coord_cartesian(xlim = c(0,42)) +      # <-- zoom without dropping data
+  coord_cartesian(xlim = c(0,42)) +
   theme_classic(base_size = 13) +
   theme(plot.margin = unit(c(.2,.2,.2,.2), "cm"))
 
@@ -35,10 +36,8 @@ ggsave("Stats/fig0_density_a3_org.png", plot = figure0, width = 8, height = 6)
 
 d <- density(data$APO_ALPHA_vs_HOLO_ALPHA, from = 0, to = 20, adjust = 1)
 
-# 2. turn it into a data.frame
 df_d <- data.frame(x = d$x, y = d$y)
 
-# 3. plot with geom_area()
 figure0_2 <- ggplot(df_d, aes(x = x, y = y)) +
   geom_area(fill = "black", color = "black", alpha = 0.3) +
   ggtitle("Prognozuotų struktūrų Cα-RMSD pasiskirstymas") +
@@ -70,10 +69,9 @@ combined_figure = grid.arrange(
 ggsave("Stats/fig0_density_a3_combined.png", plot = combined_figure, width = 16, height = 8)
 
 
-plddt_data <- read.csv("plddt_results.tsv", sep = "\t") %>%
+plddt_data <- read.csv("data/plddt_results.tsv", sep = "\t") %>%
   mutate(plddt_mean = rowMeans(across(PLDDT_0:PLDDT_4), na.rm = TRUE))
 
-# 2. Now summarise over that new column
 plddt_summary <- plddt_data %>%
   summarise(
     overall_mean     = mean(plddt_mean, na.rm = TRUE),
@@ -82,10 +80,9 @@ plddt_summary <- plddt_data %>%
     percent_above85  = 100 * mean(plddt_mean >= 85, na.rm = TRUE)
   )
 
-# 3. Inspect
 print(plddt_summary)
-# FIG 1 - APO_ALPHA TO APO AND HOLO
 
+# FIG 1 - APO_ALPHA TO APO AND HOLO
 figure1a_full <- data %>% 
   ggplot(aes(x = APO_vs_APO_ALPHA, y = HOLO_vs_APO_ALPHA, color = Closer_To_A)) +
   geom_point(size = 4, alpha = 0.7) +
@@ -191,7 +188,6 @@ cat("Wilcoxon Signed-Rank Test:\n")
 print(wilcoxon_result)
 
 # FIG 4
-# Reshape data to have PDB_ID and corresponding APO_vs_HOLO
 reshaped_rmsd <- data %>%
   select(Apo_PDB_ID, Holo_PDB_ID, APO_vs_HOLO) %>% 
   mutate(APO_vs_HOLO = as.numeric(gsub(",", ".", APO_vs_HOLO))) %>%  # Ensure numeric format
@@ -203,7 +199,6 @@ reshaped_rmsd <- data %>%
 
 # Merge with plDDT data
 merged_data <- reshaped_rmsd %>%
-  # build a new PDB_NAME that is exactly "XXXX_APO" or "XXXX_HOLO"
   mutate(
     PDB_NAME = paste0(
       toupper(PDB_ID),
@@ -213,22 +208,16 @@ merged_data <- reshaped_rmsd %>%
   ) %>%
   inner_join(plddt_data, by = "PDB_NAME")
 
-# Create the scatter plot
 figure4a_full <- ggplot(merged_data, aes(x = APO_vs_HOLO, y = plddt_mean)) +
   geom_point(fill = 'black', color = 'black', alpha = 0.3, size = 4) +
   geom_smooth(method = "lm", color = "blue") +
-  
-  # Axis labels and titles
   labs(
     x = expression(RMSD[Apo~vs~Holo]~(Å)),
     y = expression(plDDT)
   ) +
-  
-  # Axis scales
   scale_x_continuous(breaks = seq(0, 100, 10), limits = c(0, 100), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(0, 100, 10), limits = c(0, 100), expand = c(0, 0)) +
   
-  # Theme customization
   theme(
     axis.line = element_line(colour = "black"),
     panel.grid.major = element_blank(),
@@ -251,18 +240,12 @@ filtered_merged_data <- subset(merged_data, APO_vs_HOLO < 10)
 figure4b_filtered <- ggplot(filtered_merged_data, aes(x = APO_vs_HOLO, y = plddt_mean)) +
   geom_point(fill = 'black', color = 'black', alpha = 0.3, size = 4) +
   geom_smooth(method = "lm", color = "blue") +
-  
-  # Axis labels and titles
   labs(
     x = expression(RMSD[Apo~vs~Holo]~(Å)),
     y = expression(plDDT)
   ) +
-  
-  # Axis scales
   scale_x_continuous(breaks = seq(0, 5, 0.5), limits = c(0, 5), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(0, 100, 10), limits = c(0, 100), expand = c(0, 0)) +
-  
-  # Theme customization
   theme(
     axis.line = element_line(colour = "black"),
     panel.grid.major = element_blank(),
@@ -298,8 +281,6 @@ cor.test(merged_data$APO_vs_HOLO, merged_data$plddt_mean,
 
 filtered <- subset(merged_data, APO_vs_HOLO < 5)
 
-# 2. Run Pearson correlation on the filtered subset
-
 cor.test(
   filtered$APO_vs_HOLO,
   filtered$plddt_mean,
@@ -309,23 +290,15 @@ cor.test(
 data$Min_RMSD <- pmin(data$APO_vs_APO_ALPHA, data$HOLO_vs_HOLO_ALPHA, na.rm = TRUE)
 data$Max_RMSD <- pmax(data$APO_vs_APO_ALPHA, data$HOLO_vs_HOLO_ALPHA, na.rm = TRUE)
 
-
-# Create the scatter plot
 figure5a_full_max <- ggplot(data, aes(x = APO_vs_HOLO, y = Max_RMSD)) +
   geom_point(fill = 'black', color = 'black', alpha = 0.3, size = 4) +
   geom_smooth(method = "lm", color = "blue") +
-  
-  # Axis labels and titles
   labs(
     x = expression(RMSD[Apo~vs~Holo]~(Å)),
     y = expression(Didžiausias~RMSD~įvertis)
   ) +
-  
-  # Axis scales
   scale_x_continuous(breaks = seq(0, 60, 2), limits = c(0, 60), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(0, 20, 1), limits = c(0, 20), expand = c(0, 0)) +
-  
-  # Theme customization
   theme(
     axis.line = element_line(colour = "black"),
     panel.grid.major = element_blank(),
@@ -350,18 +323,12 @@ ggsave("Stats/fig5a_full_max_a3_RMSD_RMSD.png", plot = figure5a_full_max, width 
 figure5b_full_min <- ggplot(data, aes(x = APO_vs_HOLO, y = Min_RMSD)) +
   geom_point(fill = 'black', color = 'black', alpha = 0.3, size = 4) +
   geom_smooth(method = "lm", color = "blue") +
-  
-  # Axis labels and titles
   labs(
     x = expression(RMSD[Apo~vs~Holo]~(Å)),
     y = expression(Mažiausias~RMSD~įvertis)
   ) +
-  
-  # Axis scales
   scale_x_continuous(breaks = seq(0, 60, 2), limits = c(0, 60), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(0, 20, 1), limits = c(0, 20), expand = c(0, 0)) +
-  
-  # Theme customization
   theme(
     axis.line = element_line(colour = "black"),
     panel.grid.major = element_blank(),
@@ -393,22 +360,15 @@ cor.test(data$APO_vs_HOLO, data$Min_RMSD,
 
 filtered_data <- subset(data, APO_vs_HOLO < 5)
 
-# Create the scatter plot
 figure5c_filtered_max <- ggplot(filtered_data, aes(x = APO_vs_HOLO, y = Max_RMSD)) +
   geom_point(fill = 'black', color = 'black', alpha = 0.3, size = 4) +
   geom_smooth(method = "lm", color = "blue") +
-  
-  # Axis labels and titles
   labs(
     x = expression(RMSD[Apo~vs~Holo]~(Å)),
     y = expression(Didžiausias~RMSD~įvertis)
   ) +
-  
-  # Axis scales
   scale_x_continuous(breaks = seq(0, 4, 1), limits = c(0, 4), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(0, 7, 1), limits = c(0, 7), expand = c(0, 0)) +
-  
-  # Theme customization
   theme(
     axis.line = element_line(colour = "black"),
     panel.grid.major = element_blank(),
@@ -432,18 +392,12 @@ ggsave("Stats/fig5c_full_max_a3_RMSD_RMSD.png", plot = figure5c_filtered_max, wi
 figure5d_filtered_min <- ggplot(filtered_data, aes(x = APO_vs_HOLO, y = Min_RMSD)) +
   geom_point(fill = 'black', color = 'black', alpha = 0.3, size = 4) +
   geom_smooth(method = "lm", color = "blue") +
-  
-  # Axis labels and titles
   labs(
     x = expression(RMSD[Apo~vs~Holo]~(Å)),
     y = expression(Mažiausias~RMSD~įvertis)
   ) +
-  
-  # Axis scales
   scale_x_continuous(breaks = seq(0, 4, 1), limits = c(0, 4), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(0, 7, 1), limits = c(0, 7), expand = c(0, 0)) +
-  
-  # Theme customization
   theme(
     axis.line = element_line(colour = "black"),
     panel.grid.major = element_blank(),
@@ -483,37 +437,30 @@ ggsave("Stats/fig5a_combined.png", plot = combined_figure, width = 16, height = 
 
 # FIG 5A
 
-global_rmsd <- read.csv("reviewed_RMSD_info.csv", sep=',')  # Replace with your actual file path
+global_rmsd <- read.csv("data/reviewed_RMSD_info.csv", sep=',')  # Replace with your actual file path
 global_rmsd$holo_id <- tolower(global_rmsd$holo_id)
 data_with_global_rmsd <- merge(
   data,
   global_rmsd,
-  by.x  = "Holo_PDB_ID",        # key in df1_sub
-  by.y  = "holo_id",  # key in df2_sub
-  all.x = TRUE          # left join (keeps all rows of df1_sub)
+  by.x  = "Holo_PDB_ID",
+  by.y  = "holo_id",
+  all.x = TRUE
 )
 data_with_global_rmsd$max_cluster_RMSD = pmax(data_with_global_rmsd$holo_RMSD_max, data_with_global_rmsd$apo_RMSD_max)
 data_with_global_rmsd$min_cluster_RMSD = pmin(data_with_global_rmsd$holo_RMSD_min, data_with_global_rmsd$apo_RMSD_min)
 
 data_with_global_rmsd$min_cluster_RMSD = pmin(data_with_global_rmsd$holo_RMSD_min, data_with_global_rmsd$apo_RMSD_min)
 
-
-# data_with_global_rmsd <- data_with_global_rmsd %>%
-#   rowwise() %>%
-#   mutate(row_max = max(c_across(c(holo_RMSD_max, apo_RMSD_max)), na.rm = TRUE)) %>%
-#   ungroup()
 print(mean(data_with_global_rmsd$max_cluster_RMSD - data_with_global_rmsd$min_cluster_RMSD))
 
 data_with_global_rmsd$family = ifelse((data_with_global_rmsd$max_cluster_RMSD - data_with_global_rmsd$min_cluster_RMSD) < 1.273556, "Homogeneous", "Heterogeneous")
 table(data_with_global_rmsd$family)
 
 
-# Create the box plot
 figure6a <- ggplot(data_with_global_rmsd, aes(x = family, y = Max_RMSD)) +
   geom_boxplot() +
   labs(
     title = 'Maksimalių Cα-RMSD įverčių pasiskirstymas baltymų šeimose',
-    # title = "Box Plot of lowest RMSD Values by Family Group",
     x = "Šeima",
     y = "Maksimalus RMSD įvertis"
   ) +
@@ -535,18 +482,13 @@ wilcox_test <- wilcox.test(
   alternative = "less"
 )
 
-
-# Print the Wilcoxon test results
 print("Wilcoxon Rank-Sum Test Results:")
 print(wilcox_test)
 
-
-# Create the box plot
 figure6b <- ggplot(data_with_global_rmsd, aes(x = family, y = Min_RMSD)) +
   geom_boxplot() +
   labs(
     title = 'Minimalių Cα-RMSD įverčių pasiskirstymas baltymų šeimose',
-    # title = "Box Plot of lowest RMSD Values by Family Group(Apo Alpha)",
     x = "Šeima",
     y = "Minimalus RMSD įvertis"
   ) +
@@ -564,19 +506,15 @@ combined_figure = grid.arrange(
 )
 ggsave("Stats/fig6a_combined.png", plot = combined_figure, width = 16, height = 8)
 
-
-
 wilcox_test <- wilcox.test(
   data_homogeneous$Min_RMSD,
   data_heterogeneous$Min_RMSD,
   alternative = "less"
 )
 
-# Print the Wilcoxon test results
 print("Wilcoxon Rank-Sum Test Results:")
 print(wilcox_test)
 
-# max_vid(RMSD)
 print(mean(data_with_global_rmsd$max_cluster_RMSD))
 data_with_global_rmsd$flexibility = ifelse((data_with_global_rmsd$max_cluster_RMSD) < 1.678111, "rigid", "flexible")
 table(data_with_global_rmsd$flexibility)
@@ -585,7 +523,6 @@ figure7a <- ggplot(data_with_global_rmsd, aes(x = flexibility, y = Max_RMSD)) +
   geom_boxplot() +
   labs(
     title = 'Maksimalių Cα-RMSD įverčių pasiskirstymas baltymų šeimose',
-    # title = "Box Plot of lowest RMSD Values by Family Group",
     x = "Lankstumas",
     y = "Maksimalus RMSD įvertis \n (tarp eksperimentinės struktūros ir prognozuotos struktūros)"
   ) +
@@ -604,17 +541,13 @@ wilcox_test <- wilcox.test(
   alternative = "less"
 )
 
-
-# Print the Wilcoxon test results
 print("Wilcoxon Rank-Sum Test Results:")
 print(wilcox_test)
 
-# Create the box plot
 figure7b <- ggplot(data_with_global_rmsd, aes(x = flexibility, y = Min_RMSD)) +
   geom_boxplot() +
   labs(
     title = 'Minimalių Cα-RMSD įverčių pasiskirstymas lanksčiuose ir nelanksčiuose baltymuose',
-    # title = "Box Plot of lowest RMSD Values by Family Group(Apo Alpha)",
     x = "Lankstumas",
     y = "Minimalus RMSD įvertis \n (tarp eksperimentinės struktūros ir prognozuotos struktūros)"
   ) +
@@ -632,29 +565,21 @@ combined_figure = grid.arrange(
 )
 ggsave("Stats/fig7a_combined.png", plot = combined_figure, width = 16, height = 8)
 
-
-
 wilcox_test <- wilcox.test(
   data_rigid$Min_RMSD,
   data_flexible$Min_RMSD,
   alternative = "less"
 )
 
-# Print the Wilcoxon test results
 print("Wilcoxon Rank-Sum Test Results:")
 print(wilcox_test)
 
-
-
-# — user parameters —
-infile       <- "combined_apo_holo_rmsf.csv"
+infile       <- "data/combined_apo_holo_rmsf.csv"
 out_apo_png  <- "Stats/apo_rmsf_by_plddt.png"
 out_holo_png <- "Stats/holo_rmsf_by_plddt.png"
 
-# read data
 df <- read_csv(infile)
 
-# helper for bins
 df <- df %>%
   filter(!is.na(plddt_apo)) %>%
   mutate(
@@ -667,7 +592,6 @@ df <- df %>%
 summary(df$plddt_apo)
 table(is.na(df$plddt_apo))
 
-# common theme
 my_theme <- theme_bw(base_size = 14) +
   theme(
     panel.grid.major = element_line(color = "grey90"),
@@ -675,10 +599,8 @@ my_theme <- theme_bw(base_size = 14) +
   )
 
 print(df$plddt_apo_grp)
-# 1) Apo plot
 figure8a <- ggplot(df, aes(x = plddt_apo_grp, y = rmsf)) +
   geom_boxplot() +
-  # geom_jitter(width = 0.2, alpha = 0.3, size = 0.8) +
   labs(
     title = "Apo Cα-RMSF suskirstyta į pLDDT grupes",
     x     = "pLDDT grupė",
@@ -689,10 +611,8 @@ figure8a <- ggplot(df, aes(x = plddt_apo_grp, y = rmsf)) +
 print(figure8a)
 ggsave(out_apo_png, figure8a, width = 6, height = 4, dpi = 300)
 
-# 2) Holo plot
 figure8b <- ggplot(df, aes(x = plddt_holo_grp, y = rmsf)) +
   geom_boxplot() +
-  # geom_jitter(width = 0.2, alpha = 0.3, size = 0.8) +
   labs(
     title = "Holo Cα-RMSF suskirstyta į pLDDT grupes",
     x     = "pLDDT grupė",
@@ -710,8 +630,6 @@ combined_figure = grid.arrange(
 )
 ggsave("Stats/fig8a_combined.png", plot = combined_figure, width = 16, height = 8)
 
-
-
 cat("Saved:\n",
     " - ", out_apo_png, "\n",
     " - ", out_holo_png, "\n", sep = "")
@@ -725,6 +643,5 @@ wilcox_test <- wilcox.test(
   alternative = "less"
 )
 
-# Print the Wilcoxon test results
 print("Wilcoxon Rank-Sum Test Results:")
 print(wilcox_test)

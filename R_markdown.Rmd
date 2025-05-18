@@ -16,7 +16,7 @@ library(gridExtra)
 ## Data Preparation
 
 ```{r data-preparation}
-data <- read.csv("RMSD_results.csv", sep=',')
+data <- read.csv("data/RMSD_results.csv", sep=',')
 
 data <- data %>%
   mutate(
@@ -37,7 +37,7 @@ figure0 <- ggplot(data, aes(x = APO_vs_HOLO)) +
   scale_y_continuous(limits = c(0,0.6),
                      breaks = seq(0, 0.6, 0.05),
                      expand = c(0,0)) +
-  coord_cartesian(xlim = c(0,42)) +      # <-- zoom without dropping data
+  coord_cartesian(xlim = c(0,42)) +
   theme_classic(base_size = 13) +
   theme(plot.margin = unit(c(.2,.2,.2,.2), "cm"))
 
@@ -84,7 +84,7 @@ ggsave("Stats/fig0_density_a3_combined.png", plot = combined_figure, width = 16,
 ## Calculate mean plddt
 
 ```{r plddt_data}
-plddt_data <- read.csv("plddt_results.tsv", sep = "\t") %>%
+plddt_data <- read.csv("data/plddt_results.tsv", sep = "\t") %>%
   mutate(plddt_mean = rowMeans(across(PLDDT_0:PLDDT_4), na.rm = TRUE))
 
 plddt_summary <- plddt_data %>%
@@ -217,14 +217,13 @@ print(wilcoxon_result)
 ```{r figure4}
 reshaped_rmsd <- data %>%
   select(Apo_PDB_ID, Holo_PDB_ID, APO_vs_HOLO) %>% 
-  mutate(APO_vs_HOLO = as.numeric(gsub(",", ".", APO_vs_HOLO))) %>%  # Ensure numeric format
+  mutate(APO_vs_HOLO = as.numeric(gsub(",", ".", APO_vs_HOLO))) %>%
   pivot_longer(
     cols = c(Apo_PDB_ID, Holo_PDB_ID),
     names_to = "PDB_Type",
     values_to = "PDB_ID"
   )
 
-# Merge with plDDT data
 merged_data <- reshaped_rmsd %>%
   mutate(
     PDB_NAME = paste0(
@@ -477,7 +476,7 @@ cor.test(filtered_data$APO_vs_HOLO, filtered_data$Min_RMSD,
 ## Figure 6A-B
 
 ```{r figure6}
-global_rmsd <- read.csv("reviewed_RMSD_info.csv", sep=',')
+global_rmsd <- read.csv("data/reviewed_RMSD_info.csv", sep=',')
 global_rmsd$holo_id <- tolower(global_rmsd$holo_id)
 data_with_global_rmsd <- merge(
   data,
@@ -617,8 +616,6 @@ wilcox_test <- wilcox.test(
   alternative = "less"
 )
 
-
-# Print the Wilcoxon test results
 print("Wilcoxon Rank-Sum Test Results:")
 print(wilcox_test)
 
@@ -628,14 +625,13 @@ wilcox_test <- wilcox.test(
   alternative = "less"
 )
 
-# Print the Wilcoxon test results
 print("Wilcoxon Rank-Sum Test Results:")
 print(wilcox_test)
 ```
 ## Figure 8A-B
 
 ```{r figure8}
-infile       <- "combined_apo_holo_rmsf.csv"
+infile       <- "data/combined_apo_holo_rmsf.csv"
 out_apo_png  <- "Stats/apo_rmsf_by_plddt.png"
 out_holo_png <- "Stats/holo_rmsf_by_plddt.png"
 
@@ -704,7 +700,6 @@ wilcox_test <- wilcox.test(
   alternative = "less"
 )
 
-# Print the Wilcoxon test results
 print("Wilcoxon Rank-Sum Test Results:")
 print(wilcox_test)
 

@@ -1,74 +1,69 @@
-# Impact of protein conformational diversity on AlphaFold3 predictions
+# AlphaFold3 modelio tikslumo pokytis didėjant baltymų konformacinei įvairovei
 
-Main data preparation script can be found here: [Google Colab](https://colab.research.google.com/drive/16k_oZTqws-6uCptCGIRy0ykzQ-ltVHtL?usp=sharing)
-This repository contains code and scripts to perform root-mean-square deviation (RMSD) analysis and visualize protein structural alignments. It focuses on comparing APO and HOLO forms of proteins, analyzing differences, and generating insightful visualizations using R.
+Šioje repozitorijoje pasiekiami visi skriptai apo ir holo prognozuotų baltymų struktūrų analizei.
 
-## Features
+Duomenų paruošimo skriptai yra `python\ scripts/` direktorijoje. Taip pat pasiekiami [Google Colab](https://colab.research.google.com/drive/16k_oZTqws-6uCptCGIRy0ykzQ-ltVHtL?usp=sharing). Statistikos skaičiavimo skriptas `Plots.R` pasiekiamas šioje repozitorijoje. Visos diagramos randamos `Stats/` direktorijoje. 
 
-- **Data Preparation**: Preprocess RMSD datasets.
-- **Statistical Tests**: Perform Wilcoxon signed-rank tests to determine significant differences between APO and HOLO conformers.
-- **Visualization**:
-  - Density plots of RMSD values.
-  - Scatter plots comparing APO and HOLO alignments.
-  - Box plots grouped by protein families and flexibility.
-  - Conformational diversity impact on plDDT score.
+Duomenų failai yra `data/` direktorijoje. Didesni duomenų failai pasiekiami [Google Drive](https://drive.google.com/drive/folders/1LV_uK2zhjc5m4qGG6RYtLP5EhHihjW4A?usp=sharing).
 
-## Requirements
+## Vizualizacija
+
+  - RMSD reikšmių tankio grafikai.
+  - Apo ir holo struktūrų palyginimo sklaidos grafikai.
+  - Baltymų, padalintų į šeimas ir lanksčias grupes, histogramos.
+  - Konformacinės įvairovės įtaka plDDT įverčiui.
+  - RMSF įverčių palyginimas su plDDT įverčiais.
+
+## R kalbos reikalavimai
 
 - R (≥ 4.0)
-- R packages:
+- R paketai:
   - `ggplot2`
   - `dplyr`
   - `tidyr`
   - `readr`
   - `ggpubr`
+  - `gridExtra`
 
-Install the necessary packages using:
+Kaip instaliuoti paketus:
 ```r
 install.packages(c("ggplot2", "dplyr", "tidyr", "readr", "ggpubr", "gridExtra"))
 ```
 
-## Usage
+## Naudojimas
 
-1. Clone the repository:
+1. Repozitorijos klonavimas:
    ```bash
    git clone https://github.com/Komceks/Impact-of-protein-conformational-diversity-on-AlphaFold3-predictions.git
    ```
 
-2. Open the R script `Plots.R` in RStudio or run it in an R environment.
+2. Paleisti `Plots.R` RStudio programoje ar kitoje R aplinkoje.
 
-3. Ensure to set working directory.
+3. Nusistatykite darbinę direktoriją.
 
-4. Execute the script to:
-   - Preprocess and analyze the data.
-   - Generate and save plots to the `Stats/` directory.
+5. Paleidus skriptą grafikai išsaugomi `Stats/` direktorijoje.
 
-5. View saved figures for insights.
+## Gauti grafikai
 
-## Analysis Sections
+### **Figure 0**: Tankio grafikas
+- RMSD pasiskirstymas tarp APO ir HOLO struktūrų.
 
-### **Figure 0**: Density Plot
-- Visualize RMSD distributions between APO and HOLO states.
+### **Figure 1A & 1B**: Sklaidos grafikai
+- APO struktūrų panašumas į eksperimentines APO ir HOLO struktūras sklaidos grafikai (pilnas ir priartintas).
 
-### **Figure 1A & 1B**: Scatter Plots
-- Scatter plots of predicted APO structure similarity to experimental APO vs HOLO (full and zoomed).
+### **Figure 2A & 2B**: Sklaidos grafikai
+- HOLO struktūrų panašumas į eksperimentines APO ir HOLO struktūras sklaidos grafikai (pilnas ir priartintas).
 
-### **Figure 2A & 2B**: Scatter Plots
-- Scatter plots of predicted HOLO similarity to experimental APO vs HOLO (full and zoomed).
+### **Figure 4A & 4B**: plDDT pokyčio, didėjant RMSD, sklaidos grafikas
 
-### **Figure 4A & 4B**: Scatter Plot of plDDT vs. RMSD
-- Correlate predicted plDDT scores with RMSD values.
+### **Figure 5A-D**: Sklaidos grafikai 
+- Maksimalių ir minimalių RMSD reikšmių tarp eksperimentinių ir prognozuotų struktūrų pokytis didėjant konformacinei įvairovei.
 
-### **Figure 5A-D**: Scatter Plot of Maximum and minimum RMSD trends in Protein Clusters
+### **Figure 6A & 6B**: Histogramos
+- RMSD pokytis baltymų šeimose (homogeniškose ir heterogeniškose).
 
-### **Figure 6A & 6B**: Scatter Plot of RMSD by protein families
-- Analyze RMSD by protein families (homogeneous vs. heterogeneous).
+### **Figure 7A & 7B**: Histogramos
+- RMSD pokytis baltymų lankstumo grupėse (lankstūs ir nelankstūs).
 
-### **Figure 7A & 7B**: Scatter Plot of RMSD by protein flexibility
-- Analyze RMSD by protein flexibility (flexible vs. rigid).
-
-### **Figure 8A & 8B**: Box plot of RMSF vs pLDDT
-
-## Outputs
-
-Generated figures are saved in the `Stats/` directory.
+### **Figure 8A & 8B**: Histogramos
+- RMSF pokytis didėjant plDDT įverčiui baltymuose.
