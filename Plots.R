@@ -5,7 +5,7 @@ library(tidyr)
 library(readr)
 library(ggpubr)
 library(gridExtra)
-
+library(patchwork)
 # Load the RMSD data
 data <- read.csv("data/RMSD_results.csv", sep=',')
 
@@ -16,57 +16,44 @@ data <- data %>%
     Closer_To_B = ifelse(HOLO_vs_HOLO_ALPHA < APO_vs_HOLO_ALPHA, "Holo", "Apo")
   )
 
-figure0 <- ggplot(data, aes(x = APO_vs_HOLO)) +
-  geom_density(alpha = 0.3, color = "black", fill = "black", adjust = 1) +
-  ggtitle("RCSB struktūrų Cα-RMSD pasiskirstymas") +
-  xlab(expression(RMSD[Apo~vs~Holo]~(Å))) +
-  ylab("Tankis") +
-  scale_x_continuous(breaks = seq(0,70,2), expand = c(0,0)) +
-  scale_y_continuous(limits = c(0,0.6),
-                     breaks = seq(0, 0.6, 0.05),
-                     expand = c(0,0)) +
-  coord_cartesian(xlim = c(0,42)) +
-  theme_classic(base_size = 13) +
-  theme(plot.margin = unit(c(.2,.2,.2,.2), "cm"))
+d_org  <- density(data$APO_vs_HOLO,           from=0, to=42, adjust=1)
+d_pred <- density(data$APO_ALPHA_vs_HOLO_ALPHA, from=0, to=42, adjust=1)
 
-print(figure0)
-summary(data$APO_vs_HOLO)
-print(sum(data$APO_vs_HOLO < 2) / nrow(data))
-ggsave("Stats/fig0_density_a3_org.png", plot = figure0, width = 8, height = 6)
-
-d <- density(data$APO_ALPHA_vs_HOLO_ALPHA, from = 0, to = 20, adjust = 1)
-
-df_d <- data.frame(x = d$x, y = d$y)
-
-figure0_2 <- ggplot(df_d, aes(x = x, y = y)) +
-  geom_area(fill = "black", color = "black", alpha = 0.3) +
-  ggtitle("Prognozuotų struktūrų Cα-RMSD pasiskirstymas") +
-  xlab(expression(RMSD[Apo_alpha~vs~Holo_alpha]~(Å))) +
-  ylab("Tankis") +
-  scale_x_continuous(
-    limits = c(0, 20),
-    breaks = seq(0, 20, 2),
-    expand = c(0, 0)
-  ) +
-  scale_y_continuous(
-    limits = c(0, 2),
-    breaks = seq(0, 2, 0.1),
-    expand = c(0, 0)
-  ) +
-  theme_classic(base_size = 13) +
-  theme(plot.margin = unit(c(.2, .2, .2, .2), "cm"))
-
-print(figure0_2)
-summary(data$APO_ALPHA_vs_HOLO_ALPHA)
-print(sum(data$APO_ALPHA_vs_HOLO_ALPHA < 2) / nrow(data))
-ggsave("Stats/fig0_density_a3_alpha.png", plot = figure0_2, width = 8, height = 6)
-
-combined_figure = grid.arrange(
-  figure0, figure0_2,
-  ncol = 2,
-  widths = c(1,1)
+df_all <- bind_rows(
+  data.frame(x=d_org$x,  y=d_org$y,  type="PDB struktūrų Cα-RMSD pasiskirstymas"),
+  data.frame(x=d_pred$x, y=d_pred$y, type="Prognozuotų struktūrų Cα-RMSD pasiskirstymas")
 )
-ggsave("Stats/fig0_density_a3_combined.png", plot = combined_figure, width = 16, height = 8)
+
+base <- ggplot(df_all, aes(x, y, fill=type, colour=type)) +
+  geom_area(alpha=0.4, size=0.1) +
+  scale_fill_manual(values=c("#1f78b4","#e31a1c")) +
+  scale_colour_manual(values=c("#1f78b4","#e31a1c")) +
+  scale_x_continuous(breaks=c(seq(0,42,2), 42)) +
+  labs(x=expression(RMSD~(Å)), y="Tankis", fill=NULL, colour=NULL) +
+  theme_classic(base_size=14) +
+  theme(
+    legend.position=c(.8,.8),
+    panel.grid.major.x=element_line(colour="grey90", linetype="dotted")
+  )
+
+p_full <- base +
+  coord_cartesian(xlim=c(0,42), ylim=c(0, 2.5)) +
+  ggtitle("A: Cα-RMSD pasiskirstymas tarp apo ir holo struktūrų") +
+  annotate("rect",
+           xmin = 0, xmax = 42,
+           ymin = 0, ymax = 0.1,
+           linetype = "dotted", fill = NA, colour = "black")
+
+p_tail <- base +
+  coord_cartesian(xlim=c(0,42), ylim=c(0, 0.1)) +
+  ggtitle("B: Juodai taškuotu stačiakampiu nubrėžto regiono priartintas atvaizdas") +
+  theme(legend.position="none")
+
+combined <- p_full / p_tail + plot_layout(heights=c(3,1))
+
+print(combined)
+ggsave("Stats/fig0_density_tail_zoom_rect.png", combined, width=10, height=8)
+
 
 
 plddt_data <- read.csv("data/plddt_results.tsv", sep = "\t") %>%
@@ -93,6 +80,10 @@ figure1a_full <- data %>%
   scale_x_continuous(breaks = seq(0, 50, 2), limits = c(0, 50), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(0, 50, 2), limits = c(0, 50), expand = c(0, 0)) +
   theme_minimal() +
+  annotate("rect",
+           xmin = 0, xmax = 3.5,
+           ymin = 0, ymax = 3.5,
+           linetype = "dotted", fill = NA, colour = "black") +
   ggtitle('1A: prognozuotų apo struktūrų panašumo įvertinimas su apo ir holo \n eksperimentinėmis struktūromis (pilnas)')
 
 figure1b_zoom <- data %>% 
@@ -134,6 +125,10 @@ figure2a_full <- data %>%
   scale_x_continuous(breaks = seq(0, 50, 2), limits = c(0, 50), expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(0, 50, 2), limits = c(0, 50), expand = c(0, 0)) +
   theme_minimal() +
+  annotate("rect",
+           xmin = 0, xmax = 3.5,
+           ymin = 0, ymax = 3.5,
+           linetype = "dotted", fill = NA, colour = "black") +
   ggtitle('2A: prognozuotų holo struktūrų panašumo įvertinimas su apo ir holo \n eksperimentinėmis struktūromis (pilnas)')
 
 figure2b_zoom <- data %>% 
@@ -231,7 +226,10 @@ figure4a_full <- ggplot(merged_data, aes(x = APO_vs_HOLO, y = plddt_mean)) +
     plot.margin = unit(c(.2, .2, .2, .2), "cm"),
     plot.title = element_text(face = 'plain', size = 15)
   ) +
-  
+  annotate("rect",
+           xmin = 0.1, xmax = 5,
+           ymin = 0.1, ymax = 100,
+           linetype = "dotted", fill = NA, colour = "red") +
   ggtitle("plDDT įverčio pokytis didėjant konformacijos įvairovei (pilnas)")
 
 filtered_merged_data <- subset(merged_data, APO_vs_HOLO < 10)
@@ -312,7 +310,10 @@ figure5a_full_max <- ggplot(data, aes(x = APO_vs_HOLO, y = Max_RMSD)) +
     plot.margin = unit(c(.2, .2, .2, .2), "cm"),
     plot.title = element_text(face = 'plain', size = 15)
   ) +
-  
+  annotate("rect",
+           xmin = 0, xmax = 4,
+           ymin = 0, ymax = 7,
+           linetype = "dotted", fill = NA, colour = "red") +
   ggtitle("A: didžiausio RMSD įverčio pokytis tarp prognozuotų ir eksperimentinių\n struktūrų didėjant struktūrų skirtumui tarp eksperimentinių baltymų struktūrų")
 
 
@@ -342,7 +343,10 @@ figure5b_full_min <- ggplot(data, aes(x = APO_vs_HOLO, y = Min_RMSD)) +
     plot.margin = unit(c(.2, .2, .2, .2), "cm"),
     plot.title = element_text(face = 'plain', size = 15)
   ) +
-  
+  annotate("rect",
+           xmin = 0, xmax = 4,
+           ymin = 0, ymax = 7,
+           linetype = "dotted", fill = NA, colour = "red")
   ggtitle("B: mažiausio RMSD įverčio pokytis tarp prognozuotų ir eksperimentinių\n struktūrų didėjant struktūrų skirtumui tarp eksperimentinių baltymų struktūrų")
 
 
@@ -382,7 +386,6 @@ figure5c_filtered_max <- ggplot(filtered_data, aes(x = APO_vs_HOLO, y = Max_RMSD
     plot.margin = unit(c(.2, .2, .2, .2), "cm"),
     plot.title = element_text(face = 'plain', size = 15)
   ) +
-  
   ggtitle("C: didžiausio RMSD įverčio pokytis tarp prognozuotų ir eksperimentinių\n struktūrų didėjant struktūrų skirtumui tarp eksperimentinių baltymų struktūrų")
 
 
@@ -411,7 +414,6 @@ figure5d_filtered_min <- ggplot(filtered_data, aes(x = APO_vs_HOLO, y = Min_RMSD
     plot.margin = unit(c(.2, .2, .2, .2), "cm"),
     plot.title = element_text(face = 'plain', size = 15)
   ) +
-  
   ggtitle("D: mažiausio RMSD įverčio pokytis tarp prognozuotų ir eksperimentinių\n struktūrų didėjant struktūrų skirtumui tarp eksperimentinių baltymų struktūrų")
 
 
